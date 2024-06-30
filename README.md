@@ -1,4 +1,4 @@
-# React + TypeScript + Vite環境の整備されたコードセット
+# React TypeScript Vite環境の整備されたコードセット
 
 pnpm 8.6.6
 
