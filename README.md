@@ -1,30 +1,103 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite環境の整備されたコードセット
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+pnpm 8.6.6
 
-Currently, two official plugins are available:
+node 20.12.2
 
--   [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
--   [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **reactセットアップ**
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
--   Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-    // other rules...
-    parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        project: ["./tsconfig.json", "./tsconfig.node.json"],
-        tsconfigRootDir: __dirname,
-    },
-};
+```
+pnpm create vite right --template react-ts
 ```
 
--   Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
--   Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
--   Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+```
+cd right
+```
+```
+pnpm install
+```
+```
+pnpm run dev
+``` 
+
+(https://vitejs.dev/guide/)
+
+## **eslintセットアップ**
+
+ viteであれば何もせず`pnpm run lint` を実行できる。
+
+試しに使っていな変数やany注釈の変数を定義するとエラーを吐いてくれる
+
+reactで推奨されているlint項目を設定
+
+```
+pnpm install eslint eslint-plugin-react --save-dev
+```
+
+**eslintrc.cjs**
+
+```jsx
+extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+],
+settings: {
+    react: {
+        version: "detect",
+    },
+},
+```
+
+(https://www.npmjs.com/package/eslint-plugin-react)
+
+## **prettierセットアップ**
+
+```
+pnpm add --save-dev --save-exact prettier
+```
+
+(https://prettier.io/docs/en/install.html)
+
+「.prettierrc」をトップレベルで作成、下記を追記（お好み）。自分は`"tabWidth": 4,` が好み
+
+```
+{ "tabWidth": 4, "semi": true }
+```
+
+（https://prettier.io/docs/en/options)
+
+package.jsonに下記「format」追記
+
+```json
+"scripts": {
+        "dev": "vite",
+        "build": "tsc -b && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview",
+        "format": "pnpm exec prettier . --write"
+    },
+```
+
+`npm run format`でpritteirによるフォーマットが可能に
+
+eslintとprettierの競合を防ぐ
+
+```
+pnpm install --save-dev eslint-config-prettier
+```
+
+```jsx
+extends: [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "prettier",
+    ],
+```
+
+（https://github.com/prettier/eslint-config-prettier)
